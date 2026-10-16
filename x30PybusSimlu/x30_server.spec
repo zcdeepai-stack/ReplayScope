@@ -6,7 +6,6 @@ from PyInstaller.utils.hooks import collect_all
 
 datas = [
     ('X30', 'X30'),                                # URDF 模型目录
-    ('gridmap_20261212_195732.csv', '.'),           # 默认地形数据
     # map.py 作为模块会被自动收集，无需手动添加
 ]
 binaries = []
