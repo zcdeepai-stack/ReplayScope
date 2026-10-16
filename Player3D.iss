@@ -13,7 +13,7 @@
 ; 安装包文件名用的英文产品名（中文文件名在浏览器下载、邮件附件、命令行里都容易出问题）
 ; 对外产品名统一使用 ReplayScope
 #define AppSlug "ReplayScope"
-#define AppURL "https://github.com/yscrobot/ReplayScope"
+#define AppURL "https://github.com/zcdeepai-stack/ReplayScope"
 #define AppExeName "Player3D.exe"
 #define AppShortName "ReplayScope"
 
