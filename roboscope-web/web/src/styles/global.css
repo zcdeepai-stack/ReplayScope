@@ -1,0 +1,298 @@
+/* ============================================
+   RobotReplay Dark Theme - consistent with Qt app
+   ============================================ */
+:root {
+  --bg-primary: #0d1117;
+  --bg-secondary: #161b22;
+  --bg-tertiary: #21262d;
+  --border: #30363d;
+  --border-hover: #58a6ff;
+  --text-primary: #c9d1d9;
+  --text-secondary: #8b949e;
+  --accent: #58a6ff;
+  --success: #238636;
+  --warning: #d29922;
+  --danger: #f85149;
+  --shadow-glow: rgba(88, 166, 255, 0.15);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Microsoft YaHei', sans-serif;
+}
+
+#root { min-height: 100vh; }
+
+/* ============================================
+   Ant Design Dark Overrides
+   ============================================ */
+.ant-layout { background: var(--bg-primary) !important; }
+.ant-layout-sider { background: var(--bg-secondary) !important; }
+.ant-menu-dark { background: transparent !important; }
+.ant-table { background: transparent !important; }
+
+/* Card global hover */
+.ant-card {
+  transition: all 0.3s ease !important;
+}
+.ant-card-hoverable:hover {
+  border-color: var(--border-hover) !important;
+  box-shadow: 0 4px 20px var(--shadow-glow) !important;
+  transform: translateY(-2px);
+}
+
+/* Button transitions */
+.ant-btn {
+  transition: all 0.25s ease !important;
+}
+.ant-btn-primary:hover {
+  box-shadow: 0 2px 12px rgba(88, 166, 255, 0.3);
+}
+.ant-btn-default:hover {
+  border-color: var(--accent) !important;
+  color: var(--accent) !important;
+}
+
+/* Table row hover */
+.ant-table-tbody > tr:hover > td {
+  background: rgba(88, 166, 255, 0.06) !important;
+}
+.ant-table-tbody > tr.ant-table-row-selected > td {
+  background: rgba(88, 166, 255, 0.1) !important;
+}
+
+/* Breadcrumb */
+.ant-breadcrumb {
+  color: var(--text-secondary) !important;
+}
+.ant-breadcrumb a {
+  color: var(--accent) !important;
+  transition: color 0.2s ease;
+}
+.ant-breadcrumb a:hover {
+  color: #79c0ff !important;
+}
+.ant-breadcrumb-separator {
+  color: var(--text-secondary) !important;
+}
+
+/* Tag */
+.ant-tag {
+  border-radius: 4px !important;
+}
+
+/* Modal */
+.ant-modal-content {
+  background: var(--bg-secondary) !important;
+  border: 1px solid var(--border) !important;
+}
+.ant-modal-header {
+  background: var(--bg-secondary) !important;
+  border-bottom: 1px solid var(--border) !important;
+}
+.ant-modal-title {
+  color: var(--text-primary) !important;
+}
+
+/* Popconfirm */
+.ant-popconfirm .ant-popover-inner {
+  background: var(--bg-secondary) !important;
+  border: 1px solid var(--border) !important;
+}
+
+/* Select dropdown */
+.ant-select-dropdown {
+  background: var(--bg-secondary) !important;
+  border: 1px solid var(--border) !important;
+}
+.ant-select-item-option-active {
+  background: var(--bg-tertiary) !important;
+}
+.ant-select-item-option-selected {
+  background: rgba(88, 166, 255, 0.12) !important;
+}
+
+/* DatePicker popup */
+.ant-picker-dropdown {
+  background: var(--bg-secondary) !important;
+}
+.ant-picker-panel-container {
+  background: var(--bg-secondary) !important;
+  border: 1px solid var(--border) !important;
+}
+
+/* Upload dragger */
+.ant-upload-drag {
+  background: var(--bg-tertiary) !important;
+  border-color: var(--border) !important;
+  transition: all 0.3s ease !important;
+}
+.ant-upload-drag:hover {
+  border-color: var(--accent) !important;
+}
+.ant-upload-drag-hover {
+  border-color: var(--accent) !important;
+  background: rgba(88, 166, 255, 0.06) !important;
+}
+
+/* Progress bar */
+.ant-progress-text {
+  color: var(--text-secondary) !important;
+}
+
+/* Collapse */
+.ant-collapse {
+  background: var(--bg-secondary) !important;
+  border-color: var(--border) !important;
+}
+.ant-collapse-header {
+  color: var(--text-primary) !important;
+}
+.ant-collapse-content {
+  background: var(--bg-primary) !important;
+  border-color: var(--border) !important;
+}
+
+/* Empty state */
+.ant-empty-description {
+  color: var(--text-secondary) !important;
+}
+
+/* ============================================
+   Scrollbar
+   ============================================ */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--bg-secondary); border-radius: 5px; }
+::-webkit-scrollbar-thumb { background: #484f58; border-radius: 5px; border: 2px solid var(--bg-secondary); min-height: 40px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+::-webkit-scrollbar-thumb:active { background: #79c0ff; }
+
+/* Virtual table scrollbar enhancement */
+.ant-table-body::-webkit-scrollbar,
+.rc-virtual-list-holder::-webkit-scrollbar { width: 14px; height: 14px; }
+.ant-table-body::-webkit-scrollbar-track,
+.rc-virtual-list-holder::-webkit-scrollbar-track { background: #1c2128; border-left: 1px solid #30363d; }
+.ant-table-body::-webkit-scrollbar-thumb,
+.rc-virtual-list-holder::-webkit-scrollbar-thumb {
+  background: #3d444d;
+  border-radius: 7px;
+  border: 3px solid #1c2128;
+  min-height: 60px;
+}
+.ant-table-body::-webkit-scrollbar-thumb:hover,
+.rc-virtual-list-holder::-webkit-scrollbar-thumb:hover { background: #58a6ff; }
+.ant-table-body::-webkit-scrollbar-thumb:active,
+.rc-virtual-list-holder::-webkit-scrollbar-thumb:active { background: #79c0ff; }
+.ant-table-body::-webkit-scrollbar-corner,
+.rc-virtual-list-holder::-webkit-scrollbar-corner { background: #1c2128; }
+
+/* ============================================
+   Log Level Colors
+   ============================================ */
+.log-error { color: #f85149; }
+.log-warn { color: #d29922; }
+.log-info { color: #58a6ff; }
+.log-debug { color: #8b949e; }
+
+/* ============================================
+   Page transition animation
+   ============================================ */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.page-enter {
+  animation: fadeInUp 0.35s ease-out;
+}
+
+/* ============================================
+   Operation log panel
+   ============================================ */
+.op-log-panel {
+  max-height: 180px;
+  overflow-y: auto;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  padding: 8px 12px;
+  background: var(--bg-primary);
+  border-radius: 6px;
+}
+.op-log-panel .op-time {
+  color: var(--text-secondary);
+  margin-right: 8px;
+  user-select: none;
+}
+.op-log-panel .op-info { color: var(--accent); }
+.op-log-panel .op-success { color: var(--success); }
+.op-log-panel .op-error { color: var(--danger); }
+.op-log-panel .op-warn { color: var(--warning); }
+
+/* ============================================
+   Host status indicator
+   ============================================ */
+.status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+.status-dot.online { background: #238636; box-shadow: 0 0 6px rgba(35, 134, 54, 0.6); }
+.status-dot.offline { background: #f85149; box-shadow: 0 0 6px rgba(248, 81, 73, 0.4); }
+.status-dot.unknown { background: #484f58; }
+.status-dot.testing { background: #d29922; animation: pulse 1s infinite; }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* ============================================
+   Stats bar chart
+   ============================================ */
+.stats-bar {
+  display: flex;
+  height: 6px;
+  border-radius: 3px;
+  overflow: hidden;
+  background: var(--bg-tertiary);
+  margin-top: 8px;
+}
+.stats-bar > div {
+  height: 100%;
+  transition: width 0.5s ease;
+}
+
+/* ============================================
+   File list in analysis
+   ============================================ */
+.file-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  margin: 2px 4px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 12px;
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+}
+.file-chip:hover {
+  border-color: var(--accent);
+  background: rgba(88, 166, 255, 0.08);
+}
+.file-chip .file-chip-close {
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: color 0.2s;
+}
+.file-chip .file-chip-close:hover {
+  color: var(--danger);
+}

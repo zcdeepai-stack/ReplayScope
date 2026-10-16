@@ -1,0 +1,48 @@
+# Build and packaged output
+build/
+debug/
+release/
+deploy/
+dist/
+installer_output/
+**/build/
+**/dist/
+*.exe
+*.dll
+*.pdb
+*.o
+*.obj
+*.a
+*.lib
+*.pkg
+*.pyz
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# Node / web
+node_modules/
+roboscope-web/web/dist/
+*.tsbuildinfo
+
+# Runtime and user data
+*.csv
+*.log
+*.avi
+*.mp4
+*.zip
+*.7z
+roboscope-web/server/data/
+hosts.json
+
+# IDE / OS
+.idea/
+.vscode/
+*.user
+.qmake.stash
+.DS_Store
+Thumbs.db
+

@@ -1,0 +1,55 @@
+#pragma code_page(65001)
+#include <windows.h>
+#include "app_version.h"
+
+/*
+ * exe 的版本信息与图标资源。
+ *
+ * 为什么不用 qmake 依据 VERSION / QMAKE_TARGET_* 自动生成的 .rc：
+ *   qmake 用系统 ANSI 代码页读取 UTF-8 的 .pro，中文产品名在读取阶段就被
+ *   错误解码，写进 exe 属性后会出现乱码。
+ *
+ * 本文件必须保存为 UTF-8 无 BOM，配合首行 #pragma code_page(65001)，
+ * windres 才会按 UTF-8 解析，中文得以正确写入。
+ *
+ * 版本号不在此硬编码，而是来自 Player3D.pro 依据 VERSION.txt 生成的
+ * app_version.h（纯 ASCII、不含引号，因此不受编码与转义问题影响）。
+ * 本文件永不被构建过程改写，中文编码也就不会在中途被破坏。
+ */
+
+/* 把不带引号的版本宏转成字符串字面量 */
+#define RC_STR2(x) #x
+#define RC_STR(x)  RC_STR2(x)
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION    VER_MAJOR,VER_MINOR,VER_PATCH,0
+ PRODUCTVERSION VER_MAJOR,VER_MINOR,VER_PATCH,0
+ FILEFLAGSMASK  VS_FFI_FILEFLAGSMASK
+ FILEFLAGS      0x0L
+ FILEOS         VOS_NT_WINDOWS32
+ FILETYPE       VFT_APP
+ FILESUBTYPE    VFT2_UNKNOWN
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        /* 0804 = 简体中文, 04b0 = Unicode */
+        BLOCK "080404b0"
+        BEGIN
+            VALUE "CompanyName",      "DeepRobotics\0"
+            VALUE "FileDescription",  "ReplayScope\0"
+            VALUE "FileVersion",      RC_STR(VER_MAJOR.VER_MINOR.VER_PATCH.0) "\0"
+            VALUE "InternalName",     "ReplayScope\0"
+            VALUE "LegalCopyright",   "Copyright (C) 2026 DeepRobotics\0"
+            VALUE "OriginalFilename", "Player3D.exe\0"
+            VALUE "ProductName",      "ReplayScope\0"
+            VALUE "ProductVersion",   RC_STR(VER_MAJOR.VER_MINOR.VER_PATCH) "\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x804, 1200
+    END
+END
+
+/* 资源里 ID 最小的图标会被资源管理器与任务栏用作 exe 图标 */
+IDI_ICON1 ICON DISCARDABLE "x30PybusSimlu/image/icon.ico"

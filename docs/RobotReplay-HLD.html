@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>三维复现与数据分析工具概要设计说明书</title>
+<style>
+:root{--ground:#f4f5f7;--surface:#fff;--sunk:#e9ecf1;--ink:#16191d;--ink2:#333b45;--muted:#5e6773;--rule:#d2d8e0;--rule2:#e5e9ef;--accent:#2b5c93;--accent2:#dee8f3;--warn:#8a5410;--warn2:#f7eedf;--bad:#a32b22;--bad2:#f8e7e5;--good:#1b6e4b;--good2:#e2f0e9;--sans:"Segoe UI","Microsoft YaHei","Noto Sans SC",sans-serif;--cond:"Arial Narrow","Microsoft YaHei",sans-serif;--mono:Consolas,"Microsoft YaHei",monospace}
+@media(prefers-color-scheme:dark){:root{--ground:#101317;--surface:#171b21;--sunk:#1e242c;--ink:#e7ebf0;--ink2:#c1c9d4;--muted:#8a94a2;--rule:#2b333d;--rule2:#222932;--accent:#79a9de;--accent2:#182b3f;--warn:#d9a15c;--warn2:#33270f;--bad:#e88379;--bad2:#351a17;--good:#6fc79b;--good2:#14301f}}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.68;-webkit-font-smoothing:antialiased}.wrap{max-width:1040px;margin:auto;padding:0 24px 88px}.prose{max-width:76ch}header{padding-top:52px}.doc-kind{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;color:var(--accent);margin:0 0 8px}h1{font-family:var(--cond);font-size:clamp(1.9rem,4vw,2.65rem);line-height:1.18;margin:0 0 20px}h2{font-family:var(--cond);font-size:1.48rem;margin:0 0 16px;padding-bottom:8px;border-bottom:1px solid var(--rule)}h2 .n{font:500 .9rem var(--mono);color:var(--accent);margin-right:12px}h3{font-family:var(--cond);font-size:1.08rem;margin:28px 0 10px}h3 .n{font:500 .82rem var(--mono);color:var(--muted);margin-right:9px}h4{margin:20px 0 8px}p{margin:0 0 12px}ul,ol{margin:0 0 13px;padding-left:1.25rem}li{margin-bottom:5px}code{font:.87em var(--mono);background:var(--sunk);padding:.1em .38em;border-radius:3px}.ctrl,.rev{width:100%;border-collapse:collapse;font-size:.83rem}.ctrl{border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);margin-bottom:12px}.ctrl td{padding:7px 0;border-bottom:1px solid var(--rule2);vertical-align:top}.ctrl td:nth-child(odd){font-weight:600;color:var(--muted);width:92px;white-space:nowrap}.ctrl td:nth-child(3){padding-left:24px}.ctrl tr:last-child td{border-bottom:0}.rev{border:1px solid var(--rule);background:var(--surface);margin-bottom:28px}.rev th,.rev td{padding:8px 12px;text-align:left;border-bottom:1px solid var(--rule2);vertical-align:top}.rev th{background:var(--sunk);color:var(--muted);font-size:.78rem}.rev tr:last-child td{border:0}.scope{border-left:3px solid var(--accent);background:var(--surface);padding:12px 16px;border-radius:0 5px 5px 0;margin:18px 0}.warn{border-left-color:var(--warn);background:var(--warn2)}.bad{border-left-color:var(--bad);background:var(--bad2)}nav.toc{background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:16px 20px;margin:32px 0 48px}nav.toc h2{font-size:.86rem;color:var(--muted);border:0;margin:0 0 10px;padding:0;text-transform:uppercase;letter-spacing:.06em}nav.toc ol{list-style:none;padding:0;columns:2;column-gap:34px}nav.toc li{break-inside:avoid;margin-bottom:5px;font-size:.9rem}nav.toc a{color:var(--ink2);text-decoration:none}nav.toc a:hover{color:var(--accent);text-decoration:underline}nav.toc .n{font:.78rem var(--mono);color:var(--accent);margin-right:8px}section{margin-bottom:50px;scroll-margin-top:16px}.tw{overflow-x:auto;border:1px solid var(--rule);border-radius:6px;background:var(--surface);margin:16px 0 20px}.d{width:100%;border-collapse:collapse;font-size:.86rem}.d th,.d td{padding:8px 12px;text-align:left;border-bottom:1px solid var(--rule2);vertical-align:top}.d th{background:var(--sunk);color:var(--muted);font:600 .79rem var(--cond);white-space:nowrap}.d tr:last-child td{border-bottom:0}.d .id{font:.78rem var(--mono);color:var(--accent);white-space:nowrap}.d .c{text-align:center;white-space:nowrap}.tag{font:.71rem var(--mono);padding:.14em .5em;border-radius:3px;white-space:nowrap}.tag.g{background:var(--good2);color:var(--good)}.tag.w{background:var(--warn2);color:var(--warn)}.arch{background:var(--surface);border:1px solid var(--rule);border-radius:7px;padding:18px;margin:18px 0;overflow-x:auto}.arch-row{display:flex;align-items:stretch;justify-content:center;gap:10px;min-width:720px}.box{flex:1;border:1px solid var(--rule);background:var(--ground);padding:12px;border-radius:5px;text-align:center}.box b{display:block;color:var(--accent);margin-bottom:4px}.box small{display:block;color:var(--muted);line-height:1.45}.arrow{text-align:center;color:var(--accent);font:700 1.2rem var(--mono);padding:5px}.state{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;min-width:760px}.state div{background:var(--sunk);border:1px solid var(--rule);border-radius:4px;padding:10px;text-align:center;font:.78rem var(--mono)}pre{background:var(--surface);border:1px solid var(--rule);border-radius:5px;padding:12px 14px;overflow:auto;font:.81rem/1.6 var(--mono)}footer{border-top:1px solid var(--rule);padding-top:18px;margin-top:60px;color:var(--muted);font-size:.82rem}@media(max-width:700px){nav.toc ol{columns:1}.ctrl td{display:block;width:auto!important;padding:4px 0!important}.ctrl tr{display:block;padding:6px 0;border-bottom:1px solid var(--rule2)}.wrap{padding-left:14px;padding-right:14px}}@media print{body{background:#fff;color:#111}.wrap{max-width:none;padding:0}.toc{break-after:page}section{break-inside:auto}.tw,.scope,.arch{break-inside:avoid}a{color:inherit!important;text-decoration:none!important}}
+</style>
+<style>
+.shots{display:grid;grid-template-columns:1fr;gap:14px;margin:16px 0 24px}figure{margin:16px 0 24px;background:var(--surface);border:1px solid var(--rule);border-radius:6px;overflow:hidden}figure img{display:block;width:100%;height:auto;background:#080d14}figcaption{padding:9px 12px;color:var(--muted);font-size:.82rem;border-top:1px solid var(--rule)}.shots figure{margin:0}.steps{counter-reset:step;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin:14px 0 20px}.steps div{background:var(--surface);border:1px solid var(--rule);border-radius:5px;padding:12px;font-size:.87rem}.steps div:before{counter-increment:step;content:counter(step);display:block;color:var(--accent);font:700 .78rem var(--mono);margin-bottom:5px}@media(max-width:700px){.steps{grid-template-columns:1fr}}@media print{figure{break-inside:avoid}}
+</style>
+</head>
+<body><div class="wrap">
+<header>
+  <p class="doc-kind">概要设计说明书 · HLD</p>
+  <h1>三维复现与数据分析工具概要设计说明书（HLD）</h1>
+  <table class="ctrl"><tbody>
+    <tr><td>文档编号</td><td>HLD-RS-001</td><td>版本</td><td>V1.0</td></tr>
+    <tr><td>项目名称</td><td>机器人三维复现与数据分析工具</td><td>状态</td><td>初版</td></tr>
+    <tr><td>适用范围</td><td>Windows Qt 桌面端及其本地辅助进程</td><td>日期</td><td>2026-10-09</td></tr>
+    <tr><td>关联需求</td><td>《三维复现与数据分析工具需求规格说明书》V1.0</td><td>文档性质</td><td>概要设计初版</td></tr>
+  </tbody></table>
+  <table class="rev"><thead><tr><th>版本</th><th>日期</th><th>修订说明</th><th>状态</th></tr></thead><tbody>
+    <tr><td>V1.0</td><td>2026-10-09</td><td>初版。说明桌面端功能组成、程序模块、数据接口、运行流程、异常处理和安装交付设计。</td><td>初版</td></tr>
+  </tbody></table>
+</header>
+
+<nav class="toc"><h2>目录</h2><ol>
+  <li><span class="n">1</span><a href="#s1">文档目的与范围</a></li><li><span class="n">2</span><a href="#s2">功能与实现对应关系</a></li>
+  <li><span class="n">3</span><a href="#s3">技术选型</a></li><li><span class="n">4</span><a href="#s4">功能组成与界面说明</a></li>
+  <li><span class="n">5</span><a href="#s5">程序模块设计</a></li><li><span class="n">6</span><a href="#s6">主要运行流程</a></li>
+  <li><span class="n">7</span><a href="#s7">数据与通信</a></li><li><span class="n">8</span><a href="#s8">关键实现说明</a></li>
+  <li><span class="n">9</span><a href="#s9">性能、异常与测试</a></li><li><span class="n">10</span><a href="#s10">安装交付</a></li>
+  <li><span class="n">11</span><a href="#s11">需求对应与文档批准</a></li>
+</ol></nav>
+
+<section id="s1"><h2><span class="n">1</span>文档目的与范围</h2>
+<p class="prose">本文说明机器人三维复现与数据分析工具桌面端各项功能由哪些程序模块完成，模块之间如何传递数据，以及启动、播放、分析、日志收集和退出时的处理流程。开发人员依据本文实现和维护软件，测试人员依据本文确认模块连接和异常处理。</p>
+<p class="prose">设计范围包括 X30、M20、DR02 三维复现、数据分析、波形分析、日志收集、日志分析、截图录像和 Windows 安装交付。Web 端提供与桌面端相同的三维复现和数据查看功能；当桌面端 PyBullet 渲染不够流畅时，可使用浏览器端渲染，具体 Web 实现不在本文展开。</p>
+<div class="scope warn"><b>功能边界：</b>三维复现直接显示 CSV 中记录的关节角和 IMU 姿态，用于离线查看机器人动作；软件不向真实机器人发送控制指令，也不计算控制算法结果。</div>
+</section>
+
+<section id="s2"><h2><span class="n">2</span>功能与实现对应关系</h2>
+<div class="tw"><table class="d"><thead><tr><th>工具 / 页面</th><th>输入</th><th>主要处理</th><th>负责模块</th></tr></thead><tbody>
+<tr><td>X30 三维复现</td><td>关节 CSV、可选地形 CSV</td><td>显示 X30 模型，按帧播放关节和姿态；需要时同步显示地形。</td><td><code>MainWindow</code>、X30 三维服务、<code>map.py</code></td></tr>
+<tr><td>M20 三维复现</td><td>关节 CSV</td><td>显示 M20 模型，按帧播放关节和姿态；空闲时可调节轮关节。</td><td><code>MainWindow</code>、M20 三维服务</td></tr>
+<tr><td>DR02 人形三维复现</td><td>31 关节 CSV、可选机身姿态</td><td>显示 DR02 人形模型，按帧播放躯干、双臂、头部和双腿动作。</td><td><code>MainWindow</code>、DR02 三维服务、<code>DR02JointPanel</code></td></tr>
+<tr><td>播放控制</td><td>用户的播放、暂停、停止、跳转、速度和循环操作</td><td>把操作发送给当前三维服务，并用返回的帧号和关节值更新界面。</td><td><code>PyBulletClient</code>、<code>PlayerBar</code>、关节面板</td></tr>
+<tr><td>截图与录像</td><td>当前三维画面、保存路径</td><td>截图直接保存；录像在后台写入 AVI，避免阻塞界面。</td><td><code>ScreenRecorder</code>、<code>AviWriter</code></td></tr>
+<tr><td>数据分析</td><td>普通 CSV 或快照 CSV</td><td>读取需要的数据列，按六类固定页面绘图并导出。</td><td><code>CsvParser</code>、<code>CurveViewer</code>、<code>ScopeChart</code></td></tr>
+<tr><td>波形分析</td><td>CSV、用户选择的数据列</td><td>按用户配置建立多个图窗，保存或加载图窗配置。</td><td><code>CustomAnalyzer</code></td></tr>
+<tr><td>日志收集</td><td>设备信息、远程目录和所选文件</td><td>连接设备，浏览、预览、搜索和下载日志，最后打包为 ZIP。</td><td><code>LogCollectWidget</code>、<code>SshClient</code>、SSH 服务</td></tr>
+<tr><td>日志分析</td><td>本地日志文件或目录</td><td>按时间合并日志，完成筛选、搜索、回放、统计和导出。</td><td><code>LogAnalysisWidget</code></td></tr>
+<tr><td>安装交付</td><td>主程序、三个本地服务和模型资源</td><td>生成包含全部运行文件的 Windows x64 安装包。</td><td>构建脚本和安装脚本</td></tr>
+</tbody></table></div>
+</section>
+
+<section id="s3"><h2><span class="n">3</span>技术选型</h2>
+<div class="tw"><table class="d"><thead><tr><th>用途</th><th>采用技术</th><th>在本工具中的作用</th></tr></thead><tbody>
+<tr><td>桌面界面</td><td>Qt 6 / C++17</td><td>显示页面和控件，处理文件、网络、打印和 Windows 窗口。</td></tr>
+<tr><td>三维画面</td><td>Python / PyBullet</td><td>分别加载 X30、M20、DR02 模型，并按各机型 CSV 逐帧改变姿态。</td></tr>
+<tr><td>曲线图</td><td>QCustomPlot</td><td>显示多条时序曲线，支持缩放、选择范围和导出。</td></tr>
+<tr><td>远程日志</td><td>SSH / SFTP</td><td>连接设备，浏览远程目录并下载日志文件。</td></tr>
+<tr><td>录像</td><td>AVI</td><td>把三维显示区域保存为可直接播放的视频文件。</td></tr>
+<tr><td>安装包</td><td>Qt 部署工具、PyInstaller、Inno Setup</td><td>把主程序、本地服务、模型和运行文件一起安装到用户电脑。</td></tr>
+</tbody></table></div>
+</section>
+
+<section id="s4"><h2><span class="n">4</span>功能组成与界面说明</h2>
+<h3><span class="n">4.1</span>X30、M20 与 DR02 三维复现</h3>
+<p class="prose">三个机型使用相同的页面分区和播放操作，但模型、关节、CSV 读取和服务进程彼此独立。左侧选择文件并查看数据状态，中间显示三维模型，右侧显示或调节本机型关节，底部控制播放进度和速度。</p>
+<div class="shots">
+  <figure><img src="images/X30三维复现.png" alt="X30 三维复现页面"><figcaption>图 4-1　X30 三维复现页面</figcaption></figure>
+  <figure><img src="images/x20三维复现.png" alt="M20 三维复现页面"><figcaption>图 4-2　M20 三维复现页面</figcaption></figure>
+</div>
+<div class="tw"><table class="d"><thead><tr><th>界面区域</th><th>三个机型共用功能</th><th>机型差异</th></tr></thead><tbody>
+<tr><td>左侧文件区</td><td>选择关节 CSV；显示总帧数、总时长和当前状态；提供截图和录像。</td><td>X30 可再选择地形 CSV；M20 和 DR02 不显示地形选项。</td></tr>
+<tr><td>中间三维区</td><td>显示机器人模型；可用鼠标旋转、右键拖动平移和滚轮缩放；可调模型透明度；支持默认、前视、侧视和俯视。</td><td>分别加载各机型自己的模型和关节结构。DR02 使用人形 URDF。</td></tr>
+<tr><td>右侧关节区</td><td>空闲时可拖动关节，播放时跟随 CSV 显示当前关节值。</td><td>X30 为 12 个腿部关节；M20 为 12 个腿部关节和 4 个轮关节；DR02 为 31 个人形关节，按身体部位分组。</td></tr>
+<tr><td>底部播放区</td><td>播放、暂停、停止、进度跳转、范围播放、0.5x/1x/1.5x/2x 和循环播放。</td><td>操作方式相同。</td></tr>
+</tbody></table></div>
+
+<h3><span class="n">4.2</span>波形分析</h3>
+<figure><img src="images/波形分析.png" alt="波形分析页面"><figcaption>图 4-3　波形分析页面</figcaption></figure>
+<div class="steps"><div>点击“加载 CSV”，读取数据列和总时长。</div><div>建立一个或多个图窗，把需要的列加入对应图窗。</div><div>点击“绘制”，按统一时间轴显示曲线并进行缩放、拖动和区间查看。</div><div>将图窗组合保存为配置，后续加载相同类型数据时直接使用。</div></div>
+
+<h3><span class="n">4.3</span>日志管理</h3>
+<figure><img src="images/日志管理2.png" alt="日志收集页面"><figcaption>图 4-4　日志收集页面</figcaption></figure>
+<div class="tw"><table class="d"><thead><tr><th>功能</th><th>处理方式</th><th>结果</th></tr></thead><tbody>
+<tr><td>主机管理</td><td>新增、编辑或删除设备，填写地址、端口、用户名、密码和日志路径。</td><td>主机信息保存在本地配置中，列表显示连接状态。</td></tr>
+<tr><td>连接与浏览</td><td>选择主机后连接，通过目录列表进入子目录或返回上级。</td><td>显示远端文件名、大小和修改时间。</td></tr>
+<tr><td>预览与搜索</td><td>双击文本日志进行分页预览，可输入关键字查找。</td><td>每页最多显示 1000 行，并保留远端行号。</td></tr>
+<tr><td>下载与打包</td><td>勾选一个或多个文件，选择本地保存目录后开始导出。</td><td>文件下载后打包成 ZIP，界面显示进度、完成路径或错误。</td></tr>
+</tbody></table></div>
+
+<h3><span class="n">4.4</span>日志分析</h3>
+<figure><img src="images/日志管理3.png" alt="日志分析页面"><figcaption>图 4-5　日志分析页面</figcaption></figure>
+<p class="prose">用户可以添加多个日志文件或整个目录。系统读取每条日志的时间、等级、模块和消息，按时间合并后显示在同一列表中。上方条件区用于选择等级、时间范围、关键字和模块；下方提供结果搜索、前后单步和按日志时间播放。当前筛选结果可以导出，统计窗口显示各等级和模块的数量。</p>
+
+<h3><span class="n">4.5</span>固定模板数据分析</h3>
+<figure><img src="images/关节数据分析.png" alt="数据分析窗口"><figcaption>图 4-6　固定模板数据分析窗口</figcaption></figure>
+<p class="prose">数据分析窗口用于快速查看已经规定好的数据项目。用户加载 CSV 后，可以在姿态、关节、算法、性能、温度和状态六个页签之间切换。每个页签按固定规则选择数据列并绘制曲线；底部时间控件控制所有图表的显示区间，当前页可以导出为 PNG、JPG 或 PDF。</p>
+
+</section>
+
+<section id="s5"><h2><span class="n">5</span>程序模块设计</h2>
+<h3><span class="n">5.1</span>桌面主程序模块</h3>
+<div class="tw"><table class="d"><thead><tr><th>模块 / 文件</th><th>责任</th><th>输入</th><th>输出 / 协作</th></tr></thead><tbody>
+<tr><td>主窗口<br><code>MainWindow</code></td><td>创建导航和页面；记录当前机型；统一处理页面切换、三维窗口、文件选择、播放、录像和分析光标。</td><td>用户操作和窗口变化。</td><td>控制各功能页面和本地服务。</td></tr>
+<tr><td>三维服务客户端<br><code>PyBulletClient</code></td><td>启动当前机型的独立三维服务，发送加载和播放操作，接收进度、关节值、日志和错误。</td><td>页面操作和服务返回数据。</td><td>连接状态、三维窗口、播放进度和错误信息。</td></tr>
+<tr><td>三维显示区<br><code>RenderView</code></td><td>确定三维画面在主界面中的位置和大小；主窗口变化时同步调整。</td><td>主窗口移动、缩放、显示和隐藏。</td><td>三维显示区的位置、大小和显示状态。</td></tr>
+<tr><td>控制区和播放栏<br><code>ControlPanel</code> / <code>PlayerBar</code></td><td>提供文件选择、地形开关、播放、停止、速度、循环、范围、截图、录像、视角和透明度控制。</td><td>用户点击、服务状态和播放进度。</td><td>操作命令、帧号、时长和状态。</td></tr>
+<tr><td>关节面板<br><code>X30JointPanel</code> / <code>M20JointPanel</code> / <code>DR02JointPanel</code></td><td>显示或手动设置各机型自己的关节；播放中只显示数值，停止后恢复手动调节。</td><td>用户滑块和当前关节值。</td><td>单个关节的调节操作。</td></tr>
+<tr><td>录像模块<br><code>ScreenRecorder</code> / <code>AviWriter</code></td><td>定时取得三维画面并在后台写入 AVI；限制等待写入的画面数量。</td><td>三维画面、开始/停止操作和保存路径。</td><td>AVI、录像时长、帧数、丢帧数和错误。</td></tr>
+<tr><td>CSV 读取<br><code>CsvParser</code></td><td>分段读取普通 CSV 和快照 CSV，按列保存数据，处理空值和错误数值。</td><td>CSV 路径和需要的数据列。</td><td>列名、数据、行数和错误。</td></tr>
+<tr><td>固定数据分析<br><code>CurveViewer</code> / <code>ScopeChart</code></td><td>显示六类分析页，处理时间范围、缩放、提示和图片/PDF 导出。</td><td>读取后的时间和数据列。</td><td>图表、时间范围和导出文件。</td></tr>
+<tr><td>波形分析<br><code>CustomAnalyzer</code></td><td>列出数据列、建立图窗、组合曲线、保存和加载配置。</td><td>CSV、用户选择和已保存配置。</td><td>波形窗口和配置文件。</td></tr>
+<tr><td>日志收集页面<br><code>LogCollectWidget</code></td><td>管理设备、浏览远程目录、预览、搜索、选择下载并生成 ZIP。</td><td>设备信息、远程路径和搜索文字。</td><td>下载操作、本地 ZIP 和页面提示。</td></tr>
+<tr><td>日志连接客户端<br><code>SshClient</code></td><td>启动日志连接服务，发送连接、浏览、预览、搜索和下载操作，并处理超时或断线。</td><td>设备信息和用户操作。</td><td>目录、文本、下载进度和错误。</td></tr>
+<tr><td>日志分析页面<br><code>LogAnalysisWidget</code></td><td>读取多个日志，按时间合并，完成筛选、统计、回放和导出。</td><td>日志文件和筛选条件。</td><td>结果表、统计、播放状态和导出文件。</td></tr>
+<tr><td>首页<br><code>DefaultPage</code></td><td>显示软件名称、版本和主要功能入口。</td><td>导航操作。</td><td>切换到用户选择的功能页面。</td></tr>
+</tbody></table></div>
+
+<h3><span class="n">5.2</span>本地辅助程序</h3>
+<div class="tw"><table class="d"><thead><tr><th>模块</th><th>完成的工作</th><th>运行要求</th></tr></thead><tbody>
+<tr><td>X30 <code>pybullet_server.py</code></td><td>加载 X30 模型，读取关节和地形 CSV，执行播放操作，返回进度和日志。</td><td>同一时间只接受主程序的一个连接；关闭页面时释放模型和窗口。</td></tr>
+<tr><td><code>map.py</code></td><td>把 21×33 个高度值显示为 693 个地形方块，并根据中间区域高度调整机器人位置。</td><td>仅供 X30 使用；每 20 个关节帧更新一次地形。</td></tr>
+<tr><td>M20 <code>pybullet_server.py</code></td><td>加载 M20 模型，读取关节 CSV，执行与 X30 相同的播放操作。</td><td>不加载地形；四个轮关节只用于手动调节，CSV 回放仍使用 12 个腿部关节。</td></tr>
+<tr><td>DR02 <code>pybullet_server.py</code></td><td>修正模型包中的 STL 相对路径，加载 DR02 人形 URDF，读取并播放 31 个可动关节。</td><td>独立进程；优先按关节名匹配 CSV；自动计算脚底落地高度；不使用 X30/M20 关节逻辑。</td></tr>
+<tr><td><code>log_ssh_helper.py</code></td><td>连接远程设备，浏览目录，分页读取或搜索文本，通过 SFTP 下载文件。</td><td>只接受本机主程序连接；每个操作必须返回成功结果或明确错误。</td></tr>
+</tbody></table></div>
+
+<h3><span class="n">5.3</span>模块调用规则</h3>
+<ul class="prose"><li>页面按钮只产生加载、播放、暂停、停止、导出等操作，由客户端模块负责和辅助程序通信。</li><li><code>MainWindow</code> 统一负责页面切换、三维程序启动和关闭、三维窗口位置以及录像收尾。</li><li><code>CsvParser</code> 只负责读取 CSV；各分析页面负责决定使用哪些列以及如何显示。</li><li>录像文件在后台线程写入，主界面只负责取得画面和显示录像状态。</li><li>所有远程 SSH 操作由 SSH 服务完成，桌面界面只显示操作参数和返回结果。</li></ul>
+</section>
+
+<section id="s6"><h2><span class="n">6</span>主要运行流程</h2>
+<h3><span class="n">6.1</span>页面切换与引擎启动</h3>
+<ol class="prose"><li>用户进入 X30、M20 或 DR02 页面时，主程序先关闭其他机型的播放、录像和三维服务，保证同一时间只运行一个机型。</li><li>主程序启动安装包内该机型自己的三维服务，并通过本机端口建立连接。</li><li>三维服务创建模型窗口并把窗口标识返回主程序；主程序去掉独立窗口边框，将画面放到页面中间的三维区域。</li><li>主程序每 30 ms 检查三维区域的位置和大小，使画面跟随窗口移动、缩放、最小化和恢复。</li><li>选择文件或打开数据分析窗口时，主程序临时调整三维画面的显示层级，保证对话框和分析窗口不被遮挡。</li><li>离开三维页面时，主程序先停止播放和录像，再关闭当前机型服务并清除本次文件状态。</li></ol>
+
+<h3><span class="n">6.2</span>播放状态变化</h3>
+<div class="arch"><div class="state"><div>服务未启动</div><div>模型已显示</div><div>数据已加载</div><div>播放 / 暂停</div><div>完成 / 停止</div></div><div class="arrow">进入页面 → 模型显示 → 加载 CSV → 播放 ⇄ 暂停 → 完成 / 停止</div></div>
+<div class="tw"><table class="d"><thead><tr><th>状态</th><th>允许操作</th><th>主要退出条件</th><th>界面行为</th></tr></thead><tbody>
+<tr><td>服务未启动</td><td>切页、退出</td><td>对应页面激活</td><td>显示启动中或错误。</td></tr>
+<tr><td>服务就绪</td><td>加载文件、手动关节、视角、截图</td><td>加载成功或切页</td><td>默认静态模型可交互。</td></tr>
+<tr><td>数据已加载</td><td>播放、范围、速度、循环、单帧</td><td>播放或重新加载</td><td>显示总帧数和按 0.005 s 计算的时长。</td></tr>
+<tr><td>播放</td><td>暂停、停止、跳转、速度、录像</td><td>暂停、停止、范围终点、错误</td><td>禁用冲突的手动关节操作；周期更新关节面板和分析游标。</td></tr>
+<tr><td>暂停</td><td>恢复、单帧、跳转、停止</td><td>恢复或停止</td><td>保持当前三维姿态。</td></tr>
+<tr><td>完成 / 停止</td><td>重播、加载、手动控制</td><td>新操作</td><td>自然完成保留末帧；停止后恢复手动控制。</td></tr>
+</tbody></table></div>
+
+<h3><span class="n">6.3</span>每帧如何处理</h3>
+<ol class="prose"><li>X30 和 M20 读取当前行的 12 路腿部关节角和 IMU 姿态；DR02 读取 31 路人形关节角，IMU 姿态可选。</li><li>DR02 优先用 URDF 关节名匹配 CSV，也兼容 <code>Joint Pos 0..30</code>。服务只把数值写入 URDF 中确认过的 31 个可动关节。</li><li>X30 和 M20 在存在膝关节力矩列时按力矩改变膝部颜色；DR02 不套用该四足显示规则。</li><li>输入数据按每帧 0.005 s 播放。选择不同速度时调整帧间等待时间，不对相邻数据做插值或平滑。</li><li>服务定期向主程序返回当前帧和当前机型的关节值，用于更新进度条、时间和右侧关节面板。</li><li>暂停时保持当前姿态；停止时退出播放循环并恢复手动关节操作。</li></ol>
+
+<h3><span class="n">6.4</span>地形、录像与数据分析</h3>
+<ul class="prose"><li><b>X30 地形：</b>只有开关开启且地形文件存在时才加载。第一帧建立 21×33 个地形方块，后续只更新高度发生变化的方块；每 20 个关节帧切换一个地形帧。</li><li><b>录像：</b>主程序按目标帧率取得三维画面，后台线程写入 AVI。等待写入的画面最多保留 12 帧；停止时写完可用画面并正确关闭文件。</li><li><b>固定分析：</b>加载 CSV 后按姿态、关节、算法、性能、温度、状态建立六类图表；所有图表使用同一时间范围。</li><li><b>波形分析：</b>加载 CSV 后列出可用数据列，用户把列分配到一个或多个图窗；保存配置时记录图窗和列的组合。</li></ul>
+
+<h3><span class="n">6.5</span>日志收集与分析</h3>
+<ol class="prose"><li>日志收集页读取用户选择的主机信息，启动 SSH 服务并连接远程设备。连接结果立即显示在主机状态和操作日志中。</li><li>浏览目录时返回文件名、大小和修改时间；预览和搜索每次最多返回 1000 行，避免一次加载整个远程文件。</li><li>下载时先把选中文件保存到临时目录，再读取可用的 SN、版本、构型和板号信息生成 ZIP 名称，最后移动到用户选择的目录。</li><li>日志分析从每行中读取时间、等级、模块和消息，把多个文件按时间从早到晚合并，再应用用户选择的筛选条件。</li><li>日志回放按照相邻两条日志的时间差前进；界面最多保留 500 个显示块，完整数据仍用于筛选、统计和导出。</li></ol>
+</section>
+
+<section id="s7"><h2><span class="n">7</span>数据与通信</h2>
+<h3><span class="n">7.1</span>本机消息格式</h3>
+<pre>客户端请求： [4-byte big-endian JSON length] [UTF-8 JSON]
+服务端响应： [4-byte big-endian payload length] [1-byte type] [UTF-8 JSON]
+消息类型：   0x4C = Log，0x53 = Status</pre>
+<p class="prose">每条消息先写明后续内容长度。内容没有收完整时继续等待；一次收到多条消息时按长度依次拆开，保证命令和状态不会混在一起。</p>
+
+<h3><span class="n">7.2</span>控制与状态消息</h3>
+<div class="tw"><table class="d"><thead><tr><th>类别</th><th>动作 / 字段</th><th>说明</th></tr></thead><tbody>
+<tr><td>启动与关闭</td><td><code>shutdown</code>、窗口就绪、错误</td><td>优先正常关闭；超过等待时间仍未退出时，由主程序结束服务。</td></tr>
+<tr><td>数据</td><td>加载关节 CSV、可选地形 CSV</td><td>传递本地绝对路径和开关；服务返回行数、时长或解析错误。</td></tr>
+<tr><td>回放</td><td><code>play</code>、<code>pause</code>、<code>stop</code>、seek、step、range、speed、loop</td><td>命令更新服务端单一回放状态。</td></tr>
+<tr><td>模型</td><td>单关节值、视角命令</td><td>用于停止状态下调姿和相机重置/方向调整。</td></tr>
+<tr><td>状态</td><td>三维窗口标识、当前帧、总帧、12 路关节、播放状态、错误</td><td>主程序据此更新三维区域和页面控件；消息中不传输视频画面。</td></tr>
+</tbody></table></div>
+
+<h3><span class="n">7.3</span>输入文件约定</h3>
+<div class="tw"><table class="d"><thead><tr><th>数据</th><th>格式</th><th>关键字段 / 规则</th></tr></thead><tbody>
+<tr><td>关节回放 CSV</td><td>有列头文本 CSV</td><td><code>Joint Pos 0..11</code>；<code>IMU roll/pitch/yaw</code>；可选 <code>Joint Tor 2/5/8/11</code>。名义采样周期 0.005 s。</td></tr>
+<tr><td>X30 地形 CSV</td><td>无列头数值 CSV</td><td>每行 694 列：1 个时间戳 + 21×33 个高度值；列数必须严格匹配。</td></tr>
+<tr><td>分析 CSV</td><td>普通或快照格式</td><td>普通格式首个有效行为列头；快照格式前三个非空行为信息头、信息值、数据列头。空行和以 <code>#</code> 开头的数据行跳过。</td></tr>
+<tr><td>标准日志</td><td>UTF-8/本地可读文本</td><td><code>[YYYY-MM-DD HH:mm:ss.mmm.uuu] [LEVEL] [MODULE] message</code>。</td></tr>
+<tr><td>波形配置</td><td>JSON</td><td>保存所选列、分组和窗口参数，位于 <code>wave_configs/*.waveconfig.json</code>。</td></tr>
+<tr><td>主机配置</td><td>JSON</td><td>保存名称、地址、端口、用户名、密码、备注和日志路径。</td></tr>
+</tbody></table></div>
+
+<h3><span class="n">7.4</span>后台任务与资源管理</h3>
+<div class="tw"><table class="d"><thead><tr><th>资源</th><th>负责模块</th><th>处理规则</th></tr></thead><tbody>
+<tr><td>页面控件和三维窗口</td><td><code>MainWindow</code></td><td>所有显示和窗口位置调整都由主界面统一处理。</td></tr>
+<tr><td>本机通信</td><td><code>PyBulletClient</code> / <code>SshClient</code></td><td>按消息到达顺序处理，不允许多个模块同时读写同一连接。</td></tr>
+<tr><td>三维模型和播放状态</td><td>X30/M20/DR02 三维服务</td><td>每个服务只管理自己的模型、CSV 和播放状态，不与其他机型共享。</td></tr>
+<tr><td>录像和视频文件</td><td><code>ScreenRecorder</code>、录像后台任务</td><td>后台任务单独写 AVI；停止时完成剩余画面并关闭文件。</td></tr>
+<tr><td>图表数据</td><td>分析窗口</td><td>加载后只读取数据；缩放和选择范围不修改原始 CSV。</td></tr>
+</tbody></table></div>
+</section>
+
+<section id="s8"><h2><span class="n">8</span>关键实现说明</h2>
+<div class="tw"><table class="d"><thead><tr><th>编号</th><th>实现方式</th><th>采用原因</th><th>必须满足的处理</th></tr></thead><tbody>
+<tr><td>三维服务</td><td>X30、M20、DR02 分别使用独立的三维服务。</td><td>三维显示发生错误时不影响其他机型，安装包也能自带全部运行文件。</td><td>主程序统一启动和关闭服务；服务异常退出后页面必须恢复可操作状态。</td></tr>
+<tr><td>三维窗口</td><td>三维窗口由主程序放到页面中间的显示区域。</td><td>保证鼠标旋转、移动、缩放和画面显示稳定。</td><td>主窗口移动、缩放、最小化或弹出对话框时，三维画面必须同步。</td></tr>
+<tr><td>本机通信</td><td>主程序与本地服务只传操作和状态，不传视频画面。</td><td>减少数据量和显示延迟。</td><td>只允许本机连接；断线时停止接受操作并显示错误。</td></tr>
+<tr><td>动作复现</td><td>每帧直接设置机身姿态和关节角。</td><td>画面严格跟随 CSV，便于逐帧检查。</td><td>不得自动插值、平滑或修改关节数据。</td></tr>
+<tr><td>X30 地形</td><td>每 20 个关节帧更新一次地形，只处理高度发生变化的方块。</td><td>符合两类数据的帧数关系，并减少重复更新。</td><td>跳转播放位置时必须同时切换到对应地形。</td></tr>
+<tr><td>大型 CSV</td><td>CSV 分段读取，只保存绘图需要的数据列。</td><td>降低读取大文件时的内存占用。</td><td>单次预留内存不超过 512 MB；格式错误必须显示具体原因。</td></tr>
+<tr><td>录像</td><td>后台任务将三维画面写入 AVI。</td><td>录像时主界面仍可操作，用户不需要安装其他视频工具。</td><td>等待写入的画面最多 12 帧，文件接近 1.9 GB 时停止。</td></tr>
+<tr><td>远程日志</td><td>SSH 服务负责连接设备和下载文件。</td><td>把远程操作集中在一个本地服务中。</td><td>桌面程序必须显示连接、登录、浏览和下载结果。</td></tr>
+<tr><td>日志显示</td><td>完整日志用于筛选和导出，界面最多保留 500 个显示块。</td><td>保证结果完整，同时避免界面因显示内容过多而变慢。</td><td>显示数量限制不得影响筛选、统计和导出结果。</td></tr>
+</tbody></table></div>
+</section>
+
+<section id="s9"><h2><span class="n">9</span>性能、异常与测试</h2>
+<h3><span class="n">9.1</span>主要数量和大小限制</h3>
+<div class="tw"><table class="d"><thead><tr><th>对象</th><th>当前设计值</th><th>目的</th></tr></thead><tbody>
+<tr><td>正在运行的三维服务</td><td>最多 1 个</td><td>避免 X30、M20 和 DR02 同时占用显示和播放资源。</td></tr>
+<tr><td>三维窗口位置检查</td><td>每 30 ms 一次</td><td>主窗口移动或缩放时，三维画面能够及时跟随。</td></tr>
+<tr><td>播放进度更新</td><td>每 20 个输入帧一次</td><td>200 Hz 数据下约每秒更新 10 次，避免界面刷新过于频繁。</td></tr>
+<tr><td>地形对象</td><td>21×33 = 693</td><td>严格对应地形文件网格。</td></tr>
+<tr><td>录像速度 / 等待写入</td><td>目标每秒 30 帧；最多等待 12 帧</td><td>写入速度较慢时，防止等待画面不断占用内存。</td></tr>
+<tr><td>录像文件</td><td>约 1.9 GB 上限</td><td>避免 AVI 与文件系统兼容问题；停止时生成可播放文件。</td></tr>
+<tr><td>CSV 读取</td><td>每次 4 MB；预留上限 512 MB</td><td>限制读取大文件时使用的临时内存。</td></tr>
+<tr><td>远程预览</td><td>最多 1000 行/页</td><td>避免一次传输和渲染整个远程日志。</td></tr>
+<tr><td>日志显示</td><td>最多 500 个文本块</td><td>限制界面文档增长，不影响完整数据统计。</td></tr>
+</tbody></table></div>
+
+<h3><span class="n">9.2</span>异常处理</h3>
+<ul class="prose"><li>本地服务启动失败、连接断开或返回内容错误时，页面显示原因并恢复可操作状态。</li><li>加载文件前检查路径、文件和必需列；读取失败或没有数据时不得开始播放。</li><li>三维窗口失效、页面隐藏或主窗口最小化时，立即停止位置调整并隐藏三维画面。</li><li>停止录像、切换页面或退出程序时，先完成视频文件写入，再关闭录像任务。</li><li>日志连接错误按连接、登录、浏览和下载阶段分别显示，便于用户判断失败位置。</li><li>导出前检查保存路径；用户取消保存时保持当前数据和界面不变。</li></ul>
+
+<h3><span class="n">9.3</span>测试范围</h3>
+<div class="tw"><table class="d"><thead><tr><th>层级</th><th>验证重点</th><th>代表场景</th></tr></thead><tbody>
+<tr><td>文件检查</td><td>数据列名、关节对应关系、资源路径和版本一致性。</td><td>核对需求、设计、程序和安装目录文件清单。</td></tr>
+<tr><td>模块测试</td><td>CSV 读取、本机消息收发、日志解析与排序、AVI 正常结束。</td><td>空值、错误行、中文路径、空文件、大文件和操作中断。</td></tr>
+<tr><td>组合测试</td><td>主程序与各本地服务的启动、通信和关闭。</td><td>切换 X30/M20/DR02、服务意外退出、设备断线和重复连接。</td></tr>
+<tr><td>系统测试</td><td>三维回放、地形、分析同步、截图录像和日志完整流程。</td><td>200 Hz 文件、范围/循环/倍速、模态框、高 DPI、多显示器。</td></tr>
+<tr><td>安装验证</td><td>未安装开发工具的 Windows x64 电脑可以直接运行。</td><td>安装、升级、卸载、目录无写权限和安装文件缺失。</td></tr>
+</tbody></table></div>
+</section>
+
+<section id="s10"><h2><span class="n">10</span>安装交付</h2>
+<h3><span class="n">10.1</span>安装包生成</h3>
+<ol class="prose"><li>构建桌面主程序。</li><li>分别打包 X30、M20、DR02 三维服务和日志连接服务，并带上各自机器人模型和所需运行文件。</li><li>收集桌面主程序需要的运行文件、图片支持和字体资源。</li><li>汇总主程序、本地服务、模型、文档和配置目录，生成 Windows x64 安装程序。</li><li>软件界面、程序文件属性和安装包统一使用版本 <code>2.2.1</code>。</li></ol>
+<p class="prose">本章仅规定桌面主程序、X30/M20/DR02 三维服务、SSH 服务及其资源的构建和交付。</p>
+
+<h3><span class="n">10.2</span>桌面交付物</h3>
+<div class="tw"><table class="d"><thead><tr><th>交付物</th><th>内容</th><th>完整性检查</th></tr></thead><tbody>
+<tr><td>桌面可执行程序</td><td><code>Player3D.exe</code>、Qt DLL、平台和图片插件。</td><td>主窗口可启动，导航与分析模块可用。</td></tr>
+<tr><td>三维服务</td><td>X30/M20/DR02 三维服务、各自机器人模型、地面和运行文件。</td><td>进入三种机型页面后都能显示本机型默认模型。</td></tr>
+<tr><td>日志服务</td><td>日志连接服务及运行文件。</td><td>能够自动启动并连接测试设备。</td></tr>
+<tr><td>配置与文档</td><td>版本文件、可写配置目录、用户手册、SRS 与 HLD。</td><td>路径权限正确，配置可保存，文档版本一致。</td></tr>
+<tr><td>安装程序</td><td>Inno Setup x64 安装包与卸载入口。</td><td>干净环境安装/运行/卸载通过。</td></tr>
+</tbody></table></div>
+</section>
+
+<section id="s11"><h2><span class="n">11</span>需求对应与文档批准</h2>
+<h3><span class="n">11.1</span>需求与设计章节对应</h3>
+<p class="prose">编号中字母沿用 SRS：N 为页面与切换，E 为三维显示，P 为数据播放，T 为地形，V 为三维操作与输出，A 为固定数据分析，W 为自定义波形，C 为日志收集，L 为日志分析，G 为配置与交付。</p>
+<div class="tw"><table class="d"><thead><tr><th>SRS 需求</th><th>对应设计章节</th><th>负责工具 / 模块</th><th>验证重点</th></tr></thead><tbody>
+<tr><td class="id">FR-N01～05</td><td>4、6.1</td><td>主窗口和各功能页面</td><td>页面切换、重新进入、关闭和资源释放。</td></tr>
+<tr><td class="id">FR-E01～06</td><td>4.1、5、6.1</td><td>主窗口、三维客户端、X30/M20/DR02 三维服务</td><td>服务启动、模型显示、窗口跟随和异常退出。</td></tr>
+<tr><td class="id">FR-P01～11</td><td>4.1、6.2～6.3</td><td>三维服务、播放栏、关节面板</td><td>数据列、姿态单位、播放状态和时间同步。</td></tr>
+<tr><td class="id">FR-T01～07</td><td>4.1、6.4</td><td>X30 三维服务和地形模块</td><td>694 列检查、地形与动作同步、机身高度。</td></tr>
+<tr><td class="id">FR-V01～07</td><td>4.1、5、6.4</td><td>关节面板、三维显示区、录像模块</td><td>手动关节、视角、截图和长时间录像。</td></tr>
+<tr><td class="id">FR-A01～06</td><td>4.5、5</td><td>CSV 读取和固定数据分析</td><td>两类 CSV、六个页签、图表操作和导出。</td></tr>
+<tr><td class="id">FR-W01～04</td><td>4.2、5</td><td>波形分析</td><td>选择数据列、建立图窗和保存配置。</td></tr>
+<tr><td class="id">FR-C01～07</td><td>4.3、5、6.5</td><td>日志收集、日志连接服务</td><td>主机管理、登录、分页预览、下载和 ZIP。</td></tr>
+<tr><td class="id">FR-L01～08</td><td>4.4、5、6.5</td><td>日志分析</td><td>读取、排序、筛选、统计、回放和导出。</td></tr>
+<tr><td class="id">FR-G01～03</td><td>5、10</td><td>本地配置和安装脚本</td><td>配置保存、目录权限和版本一致。</td></tr>
+<tr><td class="id">NFR-P/R/C/S/U/M</td><td>8、9、10</td><td>全部桌面模块</td><td>性能、异常恢复、兼容、安全和可维护性。</td></tr>
+<tr><td class="id">IR-01～07</td><td>7</td><td>本机通信、文件读取和输出模块</td><td>消息格式、数据列、文件路径和文字编码。</td></tr>
+</tbody></table></div>
+
+<h3><span class="n">11.2</span>必须遵守的限制</h3>
+<div class="tw"><table class="d"><thead><tr><th>项目</th><th>设计约束</th><th>影响范围</th></tr></thead><tbody>
+<tr><td>本机通信</td><td>主程序和三个本地服务必须使用同一安装版本，并且只允许在本机之间通信。</td><td>安装、升级和服务连接。</td></tr>
+<tr><td>运行平台</td><td>三维画面依赖 Windows 窗口功能，发布平台限定 Windows x64。</td><td>三维显示、多显示器和系统缩放测试。</td></tr>
+<tr><td>设备账号</td><td>设备连接信息保存在本地文件，配置目录必须限制为当前用户访问。</td><td>日志收集和安装目录权限。</td></tr>
+<tr><td>大文件</td><td>大型分析文件和日志会占用较多内存；加载失败时必须保留界面并显示原因。</td><td>数据分析、波形分析和日志分析。</td></tr>
+<tr><td>录像格式</td><td>桌面端录像统一输出 AVI，不提供其他视频格式。</td><td>录像播放和磁盘空间。</td></tr>
+</tbody></table></div>
+
+<h3><span class="n">11.3</span>文档批准</h3>
+<div class="tw"><table class="d"><thead><tr><th>角色</th><th>姓名</th><th>意见 / 签字</th><th>日期</th></tr></thead><tbody>
+<tr><td>编制</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>评审</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>批准</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+</tbody></table></div>
+</section>
+
+<footer>HLD-RS-001 · V1.0 · 机器人三维复现与数据分析工具概要设计 · 初版</footer>
+</div></body>
+</html>
