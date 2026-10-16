@@ -1,8 +1,6 @@
 # ReplayScope
 
-ReplayScope 是一套 Windows 桌面端机器人三维复现与数据分析工具。它可以读取离线 CSV 数据，复现 X30、M20 和 DR02 人形机器人的关节运动，并提供波形分析、日志采集、日志分析、截图和画面录制功能。
-
-仓库只包含源码、机器人模型和构建文件。实测 CSV、日志、安装包、编译产物及账号配置不在仓库中。
+ReplayScope 是一套 Windows 机器人三维复现与数据分析工具。它读取 CSV 数据，复现 X30、M20 和 DR02 人形机器人的关节运动，并提供波形分析、日志采集、日志分析、截图和画面录制功能。
 
 ## 主要功能
 
@@ -22,7 +20,6 @@ ReplayScope 是一套 Windows 桌面端机器人三维复现与数据分析工�
 | `M20pybusSimlu/` | M20 PyBullet 服务和模型 |
 | `DR02pybusSimlu/`、`DR02/` | DR02 服务和模型 |
 | `roboscope-web/` | React 前端和 Go 后端 |
-| `docs/` | 需求、设计和数据格式说明 |
 | `deploy.bat` | Windows 完整构建与打包脚本 |
 
 ## 开发环境
@@ -110,13 +107,9 @@ cmd /c deploy.bat
 
 - X30 使用 `Joint Pos 0` 至 `Joint Pos 11`、对应力矩列以及 `IMU roll/pitch/yaw`。
 - M20 使用 `Joint Pos 0` 至 `Joint Pos 15`，顺序为左前、右前、左后、右后；每条腿依次为 HipX、HipY、Knee、Wheel。数据为发布角弧度，程序会按 M20 官方方向和零位转换后驱动模型。
-- DR02 优先按 URDF 关节名称匹配，也兼容 `Joint Pos 0` 至 `Joint Pos 30`。详细格式见 `docs/DR02关节数据CSV格式.md`。
+- DR02 优先按 URDF 关节名称匹配，也兼容 `Joint Pos 0` 至 `Joint Pos 30`。
 
-实测数据可能包含设备信息和业务信息，请不要直接提交到公开仓库。`.gitignore` 默认排除所有 CSV 和日志文件。
-
-## 安全说明
-
-SSH 密码只在当前进程内使用，不写入仓库或本地明文配置。旧版本配置中的密码字段会在读取后自动清除。
+`.gitignore` 默认排除 CSV、日志和编译产物。
 
 ## 许可证
 
