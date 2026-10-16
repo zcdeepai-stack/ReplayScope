@@ -39,7 +39,7 @@ ReplayScope 是一套 Windows 桌面端机器人三维复现与数据分析工�
 ### 1. 获取源码
 
 ```powershell
-git clone https://github.com/yscrobot/ReplayScope.git
+git clone https://github.com/YSCRobotTool/ReplayScope.git
 cd ReplayScope
 ```
 
